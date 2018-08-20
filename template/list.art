@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no'/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_648886_pgg4jms09fl.css">
+    <link rel="icon" href="//oss-img.u-bx.com/images/home/favicon.ico" type="image/x-icon">
+    <title>Welcome to 数据!</title>
+    <style>
+        * {
+            margin: 0;
+            padding:0;
+            list-style: none;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .content {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .header{
+            position: relative;
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+        }
+        .header .icon-web__jiantou_zuo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 900;
+            color: #f90
+        }
+        .header-tab {
+            display: flex;
+            list-style: none;
+            border-radius: 5px;
+            border: 1px solid #f90;
+            overflow:hidden;
+        }
+        .header-tab li{
+            width:25%;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-left: 1px solid #feac00;
+        }
+        .header-tab li:first-child {
+            border-left: none;
+        }
+        .header-tab li.active {
+            color: #fff;
+            background: #fa0;
+        }
+        .header-tab-date {
+            margin: 10px;
+            line-height: 30px;
+            color: #f90;
+            font-size: 20px;
+            font-weight: 900;
+        }
+        .table {
+            overflow:hidden;
+            width: 100%;
+            text-align: center;
+        }
+        .table-th,
+        .table-tr {
+            padding: 5px 15px;
+            display: flex;
+            width: 100%;
+            line-height: 20px;
+            align-items: center;
+            border-bottom: 1px solid #f4f4f4;
+        }
+        .table-th {
+            line-height: 30px;
+            background: #f4f4f4;
+            font-weight: 900;
+        }
+        .table-td {
+            font-size: 12px;
+        }
+        .table-td:first-child {
+            text-align: left;
+        }
+        .switch {
+            position: relative;
+            width: 100%;
+            padding: 5px;
+        }
+        .switch-btn {
+            width: 100%;
+            line-height: 40px;
+            text-align: center;
+            background: #feac00;
+            border-radius: 5px;
+            border: 1px solid #f90;
+            color: #fff;
+        }
+        .switch-btn .icon-sanjiaoxia {
+            display: inline-block;
+        }
+        .switch-btn.active .icon-sanjiaoxia {
+            display: none;
+        }
+        .switch-btn .icon-triangle-up {
+            display: none;
+        }
+        .switch-btn.active .icon-triangle-up {
+            display: inline-block;
+        }
+        .switch-list {
+            display: none;
+            position: absolute;
+            top: 50px;
+            z-index: 20;
+            width: 95%;
+            background: #fff;
+            border-radius: 5px;
+            border: 1px solid #feac00;
+            overflow:hidden;
+        }
+        .switch-list li{
+            width:100%;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .switch-list li:first-child {
+            border-left: none;
+        }
+        .switch-list li.active {
+            color: #fff;
+            background: #fa0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        
+        <div class="header">
+            <i class="iconfont icon-web__jiantou_zuo" onclick="$backList()"></i>
+            <div class="header-tab-date">
+                {{date[0]}}
+            </div>
+            <ul class="header-tab tab-amount">
+                <li onclick="tabClick(0)" class="active">今日</li>
+                <li onclick="tabClick(1)">昨日</li>
+                <li onclick="tabClick(2)">本周</li>
+                <li onclick="tabClick(3)">本月</li>
+            </ul>
+        </div>
+        <div class="switch">
+            <div class="switch-btn" onclick="btnClick()"><span>切换统计方式</span> <i class="iconfont icon-triangle-up"></i><i class="iconfont icon-sanjiaoxia"></i></div>
+            <ul class="switch-list">
+                <li onclick="typeClick(0)" class="active">切换统计方式</li>
+                <li onclick="typeClick(1)">商品名称</li>
+                <li onclick="typeClick(2)">商品类型</li>
+                <li onclick="typeClick(3)">机器编号</li>
+                <li onclick="typeClick(5)">支付方式</li>
+            </ul>
+        </div>
+        <div class="table" id="table">
+            正在加载数据...
+        </div>
+    </div>
+    <div id="tabDate" style="display:none">{{date}}</div>
+    {{each tplList}}
+    <div id="tpl{{$index}}Copy" style="display:none">{{$value}}</div>
+    <script id="tpl{{$index}}" type="text/html"></script>
+    {{/each}}
+    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="//div-1255800596.cos.ap-beijing.myqcloud.com/js/template-web.js"></script>
+    <script type="text/javascript">
+        var $type = ''
+        var $index = 0
+        var $getId = function (id) {
+            return document.getElementById(id);
+        }
+        var $getName = function (className) {
+            var arr = document.querySelectorAll(className)
+            return arr.length === 1 ? arr[0] : arr;
+        }
+        var $trData = function (id) {
+            return JSON.parse($getId(id).innerText);
+        }
+        var $backList = function () {
+            window.history.back()
+        }
+        var $copyTpl =  function (id) {
+            $getId(id).innerHTML = $getId(id + 'Copy').innerText;
+        }
+        var $eachTpl = function (type, data) {
+            var tplId = 'tpl' + type
+            $copyTpl(tplId)
+            var html = template(tplId, data);
+            console.log(data)
+            $getId('table').innerHTML = html;
+        }
+        var tabDate = $trData('tabDate')
+        var tabClick = function (index) {
+            var nodeArr = Array.prototype.slice.call($getName('.header-tab li'));
+            for(var i = 0; i < nodeArr.length; i++){
+                nodeArr[i].className = i === index ? 'active' : ''
+            }
+            $getName('.header-tab-date').innerText = tabDate[index]
+            $index = index
+            getData(index, $type)
+        }
+        var typeClick = function (type) {
+            var str = '切换统计方式'
+            var nodeArr = Array.prototype.slice.call($getName('.switch-list li'));
+            for (var i = 0; i < nodeArr.length; i++) {
+                if (i === type) {
+                    nodeArr[i].className = 'active'
+                    str = nodeArr[i].innerText
+                } else {
+                    nodeArr[i].className = ''
+                }
+            }
+            $getName('.switch-btn').className = 'switch-btn'
+            $getName('.switch-list').style.display = 'none'
+            $getName('.switch-btn span').innerHTML = str
+            $type = type
+            getData($index, type)
+        }
+        var btnClick = function (type) {
+            var btn = $getName('.switch-btn')
+            var list = $getName('.switch-list')
+            if (btn.className.match('active')){
+                btn.className = 'switch-btn'
+                list.style.display = 'none'
+            } else {
+                btn.className = 'switch-btn active'
+                list.style.display = 'block'
+            }
+        }
+        var toLink = function (id, type) {
+            window.location.href = '/detail?id=' + id + '&type=' + type
+        }
+        var $trInfo = {total:0, total8: 0}
+        var $trDataInfo = function (data, type) {
+            $trInfo.total = 0
+            let total = 0
+            data.forEach(e => {
+                if (type === 0) {
+                    $trInfo.total += e.Total
+                    if (e.Total > 100) {
+                        e.Total = parseInt(e.Total * 0.8)
+                        e.Number = parseInt(e.Number * 0.8)
+                        total += e.Total
+                    }
+                } else if (type === 5) {
+                    $trInfo.total += Number(e.TrSalePrice)
+                    e.TrSalePrice = parseInt(e.TrSalePrice * 0.8)
+                    e.SaleCount = parseInt(e.SaleCount * 0.8)
+                    total += e.TrSalePrice
+                } else if (type === 3) {
+                    $trInfo.total += Number(e.colum0)
+                    if (Number(e.colum0) > 100) {
+                        for (var key in e) {
+                            if(key.match('colum')) e[key] = parseInt(e[key] * 0.8)
+                        }
+                        total += e.colum0
+                    }
+                } else {
+                    $trInfo.total += Number(e.colum0)
+                    for (var key in e) {
+                        if(key.match('colum')) e[key] = parseInt(e[key] * 0.8)
+                    }
+                    total += e.colum0
+                }
+            })
+            $trInfo.total8 = parseInt($trInfo.total * 0.8)
+            let cha = $trInfo.total8 - total
+            console.log($trInfo.total8, total, cha)
+            if (cha !== 0) {
+                if (type === 0) {
+                    data[2].Total = data[2].Total + cha
+                    data[2].Number = data[2].Number + parseInt(cha/5)
+                } else if (type === 3) {
+                    data[0].colum3 = data[0].colum3 + cha
+                    data[0].colum4 = data[0].colum4 + parseInt(cha/5)
+                    data[0].colum0 = data[0].colum0 + cha
+                    data[0].colum00 = data[0].colum00 + parseInt(cha/5)
+                } else {
+                    data[0].colum3 = data[0].colum3 + cha
+                    data[0].colum4 = data[0].colum4 + parseInt(cha/10)
+                    data[0].colum0 = data[0].colum0 + cha
+                    data[0].colum00 = data[0].colum00 + parseInt(cha/10)
+                }
+            }
+            return data
+        }
+        var getData = function (index, type) {
+            axios.get('/api/search',{
+                params: {
+                    time: tabDate[index],
+                    type: type
+                }
+            }).then(res => {
+                if (res.data) {
+                    $trDataInfo(res.data, type || 0)
+                    $eachTpl(type || 0, {list: res.data, timeType: tabDate[index]})
+                }
+            })
+        }
+        tabClick(0)
+    </script>
+</body>
+
+</html>

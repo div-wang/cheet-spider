@@ -1,0 +1,35 @@
+{
+  "name": "experiments",
+  "version": "1.0.0",
+  "description": "experiments",
+  "author": "div-wang <gh110827@gmail.com>",
+  "private": true,
+  "scripts": {
+    "start": "nohup node app.js > start.log 2>&1 &"
+  },
+  "dependencies": {
+    "@koa/cors": "^2.2.2",
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "form-data": "^2.3.2",
+    "koa": "^2.5.2",
+    "koa-router": "^7.4.0",
+    "lodash": "^4.17.4",
+    "node-fetch": "^1.7.3"
+  },
+  "devDependencies": {
+    "art-template": "^4.12.2",
+    "express": "^4.16.2",
+    "mongoose": "^4.13.14",
+    "winston": "^3.0.0"
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

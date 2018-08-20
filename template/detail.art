@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no'/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_648886_pgg4jms09fl.css">
+    <link rel="icon" href="//oss-img.u-bx.com/images/home/favicon.ico" type="image/x-icon">
+    <title>Welcome to 数据!</title>
+    <style>
+        * {
+            margin: 0;
+            padding:0;
+            list-style: none;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .content {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .header{
+            position: relative;
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+        }
+        .header .icon-web__jiantou_zuo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 900;
+            color: #f90
+        }
+        .header-tab-date {
+            margin: 10px;
+            line-height: 30px;
+            color: #f90;
+            font-size: 20px;
+            font-weight: 900;
+        }
+        .table {
+            overflow:hidden;
+            width: 100%;
+            text-align: center;
+        }
+        .table-th,
+        .table-tr {
+            padding: 5px 15px;
+            display: flex;
+            width: 100%;
+            line-height: 20px;
+            align-items: center;
+            border-bottom: 1px solid #f4f4f4;
+        }
+        .table-th {
+            line-height: 30px;
+            background: #f4f4f4;
+            font-weight: 900;
+        }
+        .table-td {
+            font-size: 12px;
+        }
+        .table-td:first-child {
+            text-align: left;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            background: #f90;
+            color: #fff;
+            line-height: 35px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="header">
+            <i class="iconfont icon-web__jiantou_zuo" onclick="$backList()"></i>
+            <div class="header-tab-date">销售明细</div>
+        </div>
+        <div class="table" id="table">
+            正在加载数据...
+        </div>
+        <div class="loading" id="loadingMore" onclick="getData()">点击加载更多</div>
+        <div class="loading" id="loadingEnd">数据加载完了</div>
+    </div>
+    <div id="tplCopy" style="display:none">{{tplOne}}</div>
+    <script id="tplOne" type="text/html"></script>
+    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="//div-1255800596.cos.ap-beijing.myqcloud.com/js/template-web.js"></script>
+    <script type="text/javascript">
+        var $page = 0
+        var $Data = []
+        var $getId = function (id) {
+            return document.getElementById(id);
+        }
+        var $getName = function (className) {
+            var arr = document.querySelectorAll(className)
+            console.log(arr)
+            return arr.length === 1 ? arr[0] : arr;
+        }
+        var $queryOne = function (key) {
+            var str = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+            var s = str ? '?' + this._getQueryFromUrl(str) : location.search;
+            var reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)'); // 构造一个含有目标参数的正则表达式对象
+            var r = s.substr(1).match(reg); // 匹配目标参数
+            if (r != null) {
+                return decodeURIComponent(r[2]).replace(/(#\w+)$/, '');
+            }
+            return null; // 返回参数值
+        }
+        var $backList = function () {
+            window.history.back()
+        }
+        var $eachTpl = function (data) {
+            $getId('tplOne').innerHTML = $getId('tplCopy').innerText;
+            var html = template('tplOne', data);
+            $getId('table').innerHTML = html;
+        }
+        var $trDataInfo = function (data) {
+            data.forEach(e => {
+                e.TrTime = e.TrTime.replace('2018/', '')
+            })
+            $Data = $Data.concat(data)
+        }
+        var getData = function () {
+            $page += 1
+            axios.get('/api/detailData',{
+                params: {
+                    page: $page,
+                    time: $queryOne('type'),
+                    id: $queryOne('id')
+                }
+            }).then(res => {
+                if (res.data.length !== 20) {
+                    $getId('loadingMore').style.display = 'none'
+                    $getId('loadingEnd').style.display = 'block'
+                } else {
+                    $getId('loadingMore').style.display = 'block'
+                    $getId('loadingEnd').style.display = 'none'
+                }
+                $trDataInfo(res.data)
+                $eachTpl({list: $Data})
+            })
+        }
+        getData()
+    </script>
+</body>
+
+</html>

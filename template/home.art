@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no'/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <link rel="icon" href="//oss-img.u-bx.com/images/home/favicon.ico" type="image/x-icon">
+    <title>Welcome to 数据!</title>
+    <style>
+        * {
+            margin: 0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .content {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .card-box{
+            position: relative;
+            width: 100%;
+            text-align: center;
+            overflow: hidden;
+            padding: 10px;
+        }
+        .card-tab {
+            display: flex;
+            list-style: none;
+            border-radius: 5px;
+            border: 1px solid #f90;
+            overflow:hidden;
+        }
+        .card-tab li{
+            width:33.3%;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-left: 1px solid #feac00;
+        }
+        .card-tab li:first-child {
+            border-left: none;
+        }
+        .card-tab li.active {
+            color: #fff;
+            background: #fa0;
+        }
+        .card-title {
+            color: #333;
+            font-size: 20px;
+            font-weight: 900;
+            line-height: 50px;
+            text-align: left;
+        }
+        .card-title a {
+            float: right;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .card-amount,
+        .card-quantity {
+            margin-top: 20px;
+        }
+        .card-amount span,
+        .card-quantity span{
+            color: #f90;
+            font-size: 25px;
+            font-weight: 900;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="card-box clearfix">
+            <div class="card-title">销售金额 <a href="/list">更多明细</a></div>
+            <ul class="card-tab tab-amount">
+                <li onclick="tabClick(0, 'amount')" class="active">今日</li>
+                <li onclick="tabClick(1, 'amount')">昨日</li>
+                <li onclick="tabClick(2, 'amount')">本月</li>
+            </ul>
+            <div class="card-amount">总金额：<span>{{amount[0].amount}}</span> </div>
+            <div id="amountRadius" style="height: 200px"></div>
+            <div id="amountMap" style="width:110%;height: 240px"></div>
+        </div>
+        <div class="card-box clearfix">
+            <div class="card-title">销售数量 <a href="/detail">更多明细</a></div>
+            <ul class="card-tab tab-quantity">
+                <li onclick="tabClick(0, 'quantity')" class="active">今日</li>
+                <li onclick="tabClick(1, 'quantity')">昨日</li>
+                <li onclick="tabClick(2, 'quantity')">本月</li>
+            </ul>
+            <div class="card-quantity">总数：<span>{{quantity[0].number}}</span> </div>
+            <div id="quantityRadius" style="height: 200px"></div>
+            <div id="quantityMap" style="width:110%;height: 240px"></div>
+        </div>
+    </div>
+    <div id="amountData" style="display:none">{{amount}}</div>
+    <div id="quantityData" style="display:none">{{quantity}}</div>
+    <div id="lineData" style="display:none">{{lineData}}</div>
+    <script src="https://div-1255800596.cos.ap-beijing.myqcloud.com/js/echarts.common.min.js"></script>
+    <script type="text/javascript">
+        var $amountIndex = 0
+        var $quantityIndex = 0
+        var $getId = function (id) {
+            return document.getElementById(id);
+        }
+        var $getName = function (className) {
+            var arr = document.querySelectorAll(className)
+            return arr.length === 1 ? arr[0] : arr;
+        }
+        var $trData = function (id) {
+            return JSON.parse($getId(id).innerText);
+        }
+        var $switchTab = function (li, span, index, type) {
+            var nodeArr = Array.prototype.slice.call($getName(li));
+            for(var i = 0; i < nodeArr.length; i++){
+                nodeArr[i].className = i === index ? 'active' : ''
+            }
+            $getName(span).innerText = type === 'amount' ? amount[index].amount : quantity[index].number
+        }
+        var $echartsLine = function (id, {xData, yData, yName, mColor}) {
+            var Dom = $getId(id);
+            var Chart = echarts.init(Dom);
+            var option = {
+                color: mColor || ['#fa0'],
+                tooltip : {
+                    trigger: 'axis',
+                    formatter: "{b}<br/>{a}: {c}",
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: xData
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: yName,
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: yData,
+                }]
+            };
+            Chart.setOption(option, true);
+        }
+        var $echartsRadius = function (id, {rData, rName}) {
+            var Dom = $getId(id);
+            var Chart = echarts.init(Dom);
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data:['现金','非现金']
+                },
+                series: [
+                    {
+                        name: rName,
+                        type: 'pie',
+                        radius: ['50%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data:[
+                            {value:rData.cash, name:'现金'},
+                            {value:rData.nonCash, name:'非现金'},
+                        ]
+                    }
+                ]
+            };
+            Chart.setOption(option, true);
+        }
+        var tabClick = function (index, type) {
+            if (type === 'amount') {
+                if ($amountIndex === index) return
+                $amountIndex = index
+                $echartsRadius('amountRadius', {rData:amount[index], rName: '今日销售金额'})
+                $switchTab('.tab-amount li', '.card-amount span', index, type)
+            } else {
+                if ($quantityIndex === index) return
+                $quantityIndex = index
+                $echartsRadius('quantityRadius', {rData:quantity[index], rName: '今日销售数量'})
+                $switchTab('.tab-quantity li', '.card-quantity span', index, type)
+            }
+        }
+        
+        var lineData = $trData("lineData")
+        var amount = $trData("amountData")
+        var quantity = $trData("quantityData")
+
+        $echartsLine('amountMap', {xData:lineData.time, yData: lineData.amount, yName: '销售金额'})
+        $echartsLine('quantityMap', {xData:lineData.time, yData: lineData.quantity, yName: '销售数量'})
+
+        $echartsRadius('amountRadius', {rData:amount[0], rName: '今日销售金额'})
+        $echartsRadius('quantityRadius', {rData:quantity[0], rName: '今日销售数量'})
+       </script>
+</body>
+
+</html>
