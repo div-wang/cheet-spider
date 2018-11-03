@@ -188,6 +188,7 @@
     <script type="text/javascript">
         var $type = ''
         var $index = 0
+        var $scale = 0.7
         var $getId = function (id) {
             return document.getElementById(id);
         }
@@ -260,32 +261,32 @@
                 if (type === 0) {
                     $trInfo.total += e.Total
                     if (e.Total > 100) {
-                        e.Total = parseInt(e.Total * 0.8)
-                        e.Number = parseInt(e.Number * 0.8)
+                        e.Total = parseInt(e.Total * $scale)
+                        e.Number = parseInt(e.Number * $scale)
                         total += e.Total
                     }
                 } else if (type === 5) {
                     $trInfo.total += Number(e.TrSalePrice)
-                    e.TrSalePrice = parseInt(e.TrSalePrice * 0.8)
-                    e.SaleCount = parseInt(e.SaleCount * 0.8)
+                    e.TrSalePrice = parseInt(e.TrSalePrice * $scale)
+                    e.SaleCount = parseInt(e.SaleCount * $scale)
                     total += e.TrSalePrice
                 } else if (type === 3) {
                     $trInfo.total += Number(e.colum0)
                     if (Number(e.colum0) > 100) {
                         for (var key in e) {
-                            if(key.match('colum')) e[key] = parseInt(e[key] * 0.8)
+                            if(key.match('colum')) e[key] = parseInt(e[key] * $scale)
                         }
                         total += e.colum0
                     }
                 } else {
                     $trInfo.total += Number(e.colum0)
                     for (var key in e) {
-                        if(key.match('colum')) e[key] = parseInt(e[key] * 0.8)
+                        if(key.match('colum')) e[key] = parseInt(e[key] * $scale)
                     }
                     total += e.colum0
                 }
             })
-            $trInfo.total8 = parseInt($trInfo.total * 0.8)
+            $trInfo.total8 = parseInt($trInfo.total * $scale)
             let cha = $trInfo.total8 - total
             console.log($trInfo.total8, total, cha)
             if (cha !== 0) {
