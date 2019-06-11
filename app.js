@@ -1,9 +1,11 @@
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const exec = require('child_process').exec;   
 
 const Koa = require('koa');
 const Router = require('koa-router')();
+const { dateFormat } = require('./utils/date');
 // const mongoose = require('mongoose')
 
 const getData = require('./model/getData');
@@ -38,12 +40,17 @@ app.use(Router.routes())
 
 http.createServer(app.callback()).listen(3050);
 var credentials = {
-  "key": fs.readFileSync('/Users/div/.ssh/div36.key', 'utf8'),
-  "cert": fs.readFileSync('/Users/div/.ssh/div36.cert', 'utf8')
+  "key": fs.readFileSync('/home/div/.ssh/div36.key', 'utf8'),
+  "cert": fs.readFileSync('/home/div/.ssh/div36.cert', 'utf8')
 };
 https.createServer(credentials, app.callback()).listen(3051);
+exec(`mv start.log ./logs/start.${dateFormat(Date.now(), 'yyMMddhhmm')}.log && touch start.log`, (err, stdout, stderr) => {
+  if (err) logger.error(err)
+  logger.info('listen: 3050')
+  fs.writeFileSync('stop.sh', `kill -9 ${process.pid}`, 'utf8')
+  fs.chmodSync('stop.sh', "777")
+})
 
-logger.info('listen: 3050')
 
 
 

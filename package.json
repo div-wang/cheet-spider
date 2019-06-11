@@ -5,7 +5,9 @@
   "author": "div-wang <gh110827@gmail.com>",
   "private": true,
   "scripts": {
-    "start": "nohup node app.js > start.log 2>&1 &"
+    "start": "nohup node app.js > start.log 2>&1 &",
+    "stop": "./stop.sh",
+    "restart": "./stop.sh && npm start"
   },
   "dependencies": {
     "@koa/cors": "^2.2.2",
