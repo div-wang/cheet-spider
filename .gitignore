@@ -1,5 +1,7 @@
 /node_modules
 /logs
+start.log
+stop.sh
 .DS_Store
 .DS_Store?
 *.swp
