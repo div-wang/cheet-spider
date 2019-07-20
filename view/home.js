@@ -5,7 +5,7 @@ const logger = require('../utils/logger');
 
 const getTotal8 = require('../model/getTotal8');
 const getTotalData = require('../model/getTotalData');
-const scale = 0.7
+const scale = 0.6
 
 const transformTotal = (str) => {
   let amount = [];
