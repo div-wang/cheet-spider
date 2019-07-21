@@ -188,7 +188,7 @@
     <script type="text/javascript">
         var $type = ''
         var $index = 0
-        var $scale = 0.6
+        var $scale = 0.7
         var $getId = function (id) {
             return document.getElementById(id);
         }
