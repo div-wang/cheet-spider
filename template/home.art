@@ -33,7 +33,7 @@
             width: 100%;
             text-align: center;
             overflow: hidden;
-            padding: 10px;
+            padding: 10px 10px 30px;
             background: #fafafa;
             border-bottom: 1px solid #ddd
         }
@@ -95,8 +95,8 @@
                 <li onclick="tabClick(2, 'amount')">本月</li>
             </ul>
             <div class="card-amount">总金额：<span>{{amount[0].amount}}</span> </div>
-            <div id="amountRadius" style="height: 200px"></div>
             <div id="amountMap" style="width:110%;height: 240px"></div>
+            <!--<div id="amountRadius" style="height: 180px"></div>-->
             <a href="/list">更多明细 +</a>
         </div>
         <div class="card-box clearfix">
@@ -107,8 +107,8 @@
                 <li onclick="tabClick(2, 'quantity')">本月</li>
             </ul>
             <div class="card-quantity">总数：<span>{{quantity[0].number}}</span> </div>
-            <div id="quantityRadius" style="height: 200px"></div>
             <div id="quantityMap" style="width:110%;height: 240px"></div>
+            <!--<div id="quantityRadius" style="height: 200px"></div>-->
             <a href="/list">更多明细 +</a>
         </div>
     </div>
@@ -173,11 +173,6 @@
                 tooltip: {
                     trigger: 'item',
                     formatter: "{a} <br/>{b}: {c} ({d}%)"
-                },
-                legend: {
-                    orient: 'vertical',
-                    x: 'left',
-                    data:['现金','非现金']
                 },
                 series: [
                     {
