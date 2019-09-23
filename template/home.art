@@ -228,8 +228,8 @@
         $echartsLine('amountMap', {xData:lineData.time, yData: lineData.amount, yName: '销售金额'})
         $echartsLine('quantityMap', {xData:lineData.time, yData: lineData.quantity, yName: '销售数量'})
 
-        #$echartsRadius('amountRadius', {rData:amount[0], rName: '今日销售金额'})
-        #$echartsRadius('quantityRadius', {rData:quantity[0], rName: '今日销售数量'})
+        // $echartsRadius('amountRadius', {rData:amount[0], rName: '今日销售金额'})
+        // $echartsRadius('quantityRadius', {rData:quantity[0], rName: '今日销售数量'})
        </script>
 </body>
 
