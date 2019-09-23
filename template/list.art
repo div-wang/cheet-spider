@@ -43,32 +43,32 @@
             padding: 20px;
             font-size: 18px;
             font-weight: 900;
-            color: #f90
+            color: #0366d6
         }
         .header-tab {
             display: flex;
             list-style: none;
-            border-radius: 5px;
-            border: 1px solid #f90;
+            #border-radius: 5px;
+            border-top: 3px solid #0366d6;
             overflow:hidden;
         }
         .header-tab li{
             width:25%;
             padding: 10px 15px;
             font-size: 14px;
-            border-left: 1px solid #feac00;
+            #border-left: 1px solid #0366d6;
         }
         .header-tab li:first-child {
             border-left: none;
         }
         .header-tab li.active {
-            color: #fff;
-            background: #fa0;
+            color: #0366d6;
+            #background: #0366d6;
         }
         .header-tab-date {
             margin: 10px;
             line-height: 30px;
-            color: #f90;
+            color: #0366d6;
             font-size: 20px;
             font-weight: 900;
         }
@@ -106,10 +106,10 @@
             width: 100%;
             line-height: 40px;
             text-align: center;
-            background: #feac00;
+            background: #f1f1f1;
             border-radius: 5px;
-            border: 1px solid #f90;
-            color: #fff;
+            border: 1px solid #f1f1f1;
+            color: #333;
         }
         .switch-btn .icon-sanjiaoxia {
             display: inline-block;
@@ -131,7 +131,7 @@
             width: 95%;
             background: #fff;
             border-radius: 5px;
-            border: 1px solid #feac00;
+            border: 1px solid #0366d6;
             overflow:hidden;
         }
         .switch-list li{
@@ -144,7 +144,7 @@
         }
         .switch-list li.active {
             color: #fff;
-            background: #fa0;
+            background: #0366d6;
         }
     </style>
 </head>

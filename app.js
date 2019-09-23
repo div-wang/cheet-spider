@@ -39,11 +39,11 @@ app.use(Router.routes())
 
 
 http.createServer(app.callback()).listen(3060);
-var credentials = {
-  "key": fs.readFileSync('/home/div/.ssh/div36.key', 'utf8'),
-  "cert": fs.readFileSync('/home/div/.ssh/div36.cert', 'utf8')
-};
-https.createServer(credentials, app.callback()).listen(3061);
+// var credentials = {
+//   "key": fs.readFileSync('/home/div/.ssh/div36.key', 'utf8'),
+//   "cert": fs.readFileSync('/home/div/.ssh/div36.cert', 'utf8')
+// };
+// https.createServer(credentials, app.callback()).listen(3061);
 exec(`mv start.log ./logs/start.${dateFormat(Date.now(), 'yyMMddhhmm')}.log && touch start.log`, (err, stdout, stderr) => {
   if (err) logger.error(err)
   logger.info('listen: 3060')

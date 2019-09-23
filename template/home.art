@@ -34,26 +34,27 @@
             text-align: center;
             overflow: hidden;
             padding: 10px;
+            background: #fafafa;
+            border-bottom: 1px solid #ddd
         }
         .card-tab {
             display: flex;
             list-style: none;
-            border-radius: 5px;
-            border: 1px solid #f90;
+            border-top: 3px solid #0366d6;
             overflow:hidden;
         }
         .card-tab li{
             width:33.3%;
             padding: 10px 15px;
             font-size: 14px;
-            border-left: 1px solid #feac00;
+            #border-left: 1px solid #0366d6;
         }
         .card-tab li:first-child {
             border-left: none;
         }
         .card-tab li.active {
-            color: #fff;
-            background: #fa0;
+            color: #0366d6;
+            #border-bottom: 1px solid #f00;
         }
         .card-title {
             color: #333;
@@ -61,11 +62,13 @@
             font-weight: 900;
             line-height: 50px;
             text-align: left;
+            #background: 0366d6;
         }
-        .card-title a {
-            float: right;
-            color: #999;
-            font-size: 12px;
+        .card-box a {
+            #float: right;
+            color: #0366d6;
+            #font-size: 12px;
+            text-decoration: none;
         }
 
         .card-amount,
@@ -74,17 +77,18 @@
         }
         .card-amount span,
         .card-quantity span{
-            color: #f90;
+            color: #0366d6;
             font-size: 25px;
             font-weight: 900;
         }
+        
     </style>
 </head>
 
 <body>
     <div class="content">
         <div class="card-box clearfix">
-            <div class="card-title">销售金额 <a href="/list">更多明细</a></div>
+            <div class="card-title">￥销售金额</div>
             <ul class="card-tab tab-amount">
                 <li onclick="tabClick(0, 'amount')" class="active">今日</li>
                 <li onclick="tabClick(1, 'amount')">昨日</li>
@@ -93,9 +97,10 @@
             <div class="card-amount">总金额：<span>{{amount[0].amount}}</span> </div>
             <div id="amountRadius" style="height: 200px"></div>
             <div id="amountMap" style="width:110%;height: 240px"></div>
+            <a href="/list">更多明细 +</a>
         </div>
         <div class="card-box clearfix">
-            <div class="card-title">销售数量 <a href="/detail">更多明细</a></div>
+            <div class="card-title">@销售金额</div>
             <ul class="card-tab tab-quantity">
                 <li onclick="tabClick(0, 'quantity')" class="active">今日</li>
                 <li onclick="tabClick(1, 'quantity')">昨日</li>
@@ -104,6 +109,7 @@
             <div class="card-quantity">总数：<span>{{quantity[0].number}}</span> </div>
             <div id="quantityRadius" style="height: 200px"></div>
             <div id="quantityMap" style="width:110%;height: 240px"></div>
+            <a href="/list">更多明细 +</a>
         </div>
     </div>
     <div id="amountData" style="display:none">{{amount}}</div>
@@ -134,7 +140,7 @@
             var Dom = $getId(id);
             var Chart = echarts.init(Dom);
             var option = {
-                color: mColor || ['#fa0'],
+                color: mColor || ['#0366d6'],
                 tooltip : {
                     trigger: 'axis',
                     formatter: "{b}<br/>{a}: {c}",
@@ -144,6 +150,7 @@
                 },
                 xAxis: {
                     type: 'category',
+                    boundaryGap: false,
                     data: xData
                 },
                 yAxis: {
@@ -151,7 +158,8 @@
                 },
                 series: [{
                     name: yName,
-                    type: 'bar',
+                    type: 'line',
+                    areaStyle: {},
                     barWidth: '60%',
                     data: yData,
                 }]

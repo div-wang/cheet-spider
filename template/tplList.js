@@ -79,7 +79,7 @@ let tplOne = `<div class="table-th">
         {{each list as item}}
         <div class="table-tr">
             <div class="table-td" style="width:40%;">{{item.MiAlias}}<br><span style="color:#999">{{if item.TrPayType == 0}}现金支付{{else if item.TrPayType == 65}}微信支付{{else}}支付宝支付{{/if}}</span></div>
-            <div class="table-td" style="width:25%;">{{item.TrCoilID}}<br><span style="color:#f90">{{item.TrSalePrice}}</span></div>
+            <div class="table-td" style="width:25%;">{{item.TrCoilID}}<br><span style="color:#0366d6">{{item.TrSalePrice}}</span></div>
             <div class="table-td" style="width:35%;">{{if item.TrResult == 0}}<span style="color:green">成功</span>{{else if item.TrResult == 4}}<span style="color:red">失败</span>{{else}}未知{{/if}}<br>{{item.TrTime}}</div>
         </div>
         {{/each}}`
